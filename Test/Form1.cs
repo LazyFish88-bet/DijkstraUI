@@ -11,10 +11,9 @@ namespace Test
         {
 
         }
-
+        public BasePage basepage = new BasePage();
         private void Form1_Load(object sender, EventArgs e)
         {
-            BasePage basepage=new BasePage();
             ChuyenTrang(basepage);
         }
         public void ChuyenTrang(UserControl UC)
@@ -27,12 +26,25 @@ namespace Test
 
         private void Start_Click(object sender, EventArgs e)
         {
-            string start= StartDestination.Text;
-            string end= EndDestination.Text;
+
+            string start = StartDestination.Text;
+            string end = EndDestination.Text;
             Dijkstra dijkstra = new Dijkstra();
             dijkstra.Start = start;
             dijkstra.End = end;
-            ChuyenTrang(dijkstra);
+            basepage.Run(dijkstra);
+
+        }
+
+        private void Back_Click(object sender, EventArgs e)
+        {
+
+            ChuyenTrang(basepage);
+        }
+
+        private void LoadPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
