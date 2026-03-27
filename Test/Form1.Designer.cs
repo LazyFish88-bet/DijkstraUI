@@ -85,21 +85,23 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Times New Roman", 13.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(1462, 165);
+            label1.Location = new Point(1490, 190);
             label1.Name = "label1";
             label1.Size = new Size(86, 42);
             label1.TabIndex = 4;
             label1.Text = "Start";
+            label1.Click += label1_Click;
             // 
             // label2
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Times New Roman", 13.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(1734, 165);
+            label2.Location = new Point(1498, 307);
             label2.Name = "label2";
             label2.Size = new Size(78, 42);
             label2.TabIndex = 5;
             label2.Text = "End";
+            label2.Click += label2_Click;
             // 
             // StartComboBox
             // 
@@ -107,10 +109,9 @@
             StartComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             StartComboBox.Font = new Font("Times New Roman", 20F, FontStyle.Regular, GraphicsUnit.Point, 0);
             StartComboBox.FormattingEnabled = true;
-            StartComboBox.Items.AddRange(new object[] { "A", "B", "C", "D", "E", "F" });
             StartComboBox.Location = new Point(1406, 235);
             StartComboBox.Name = "StartComboBox";
-            StartComboBox.Size = new Size(200, 69);
+            StartComboBox.Size = new Size(256, 69);
             StartComboBox.TabIndex = 6;
             // 
             // EndComboBox
@@ -119,10 +120,9 @@
             EndComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             EndComboBox.Font = new Font("Times New Roman", 19.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
             EndComboBox.FormattingEnabled = true;
-            EndComboBox.Items.AddRange(new object[] { "A", "B", "C", "D", "E", "F" });
-            EndComboBox.Location = new Point(1682, 235);
+            EndComboBox.Location = new Point(1406, 352);
             EndComboBox.Name = "EndComboBox";
-            EndComboBox.Size = new Size(200, 69);
+            EndComboBox.Size = new Size(256, 69);
             EndComboBox.TabIndex = 7;
             // 
             // Form1

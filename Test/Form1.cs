@@ -14,9 +14,18 @@ namespace Test
         public BasePage basepage = new BasePage();
         private void Form1_Load(object sender, EventArgs e)
         {
-           
             ChuyenTrang(basepage);
-           
+            addItemtoComboBox(Dijkstra.EdgesName);
+        }
+        public void addItemtoComboBox(string[] diachi)
+        {
+            StartComboBox.Items.Clear();
+            EndComboBox.Items.Clear();
+            foreach (string location in diachi)
+            {
+                StartComboBox.Items.Add(location);
+                EndComboBox.Items.Add(location);
+            }
         }
         public void ChuyenTrang(UserControl UC)
         {
@@ -38,13 +47,13 @@ namespace Test
         private void Start_Click(object sender, EventArgs e)
         {
             string start = StartComboBox.Text;
-            if (StartComboBox.Items.Contains(start)==false)
+            if (StartComboBox.FindStringExact(start) == -1)
             {
                 MessageBox.Show("Điểm bắt đầu này không tồn tại");
                 return;
             }
             string end = EndComboBox.Text;
-            if (!EndComboBox.Items.Contains(end)==false)
+            if (EndComboBox.FindStringExact(end)== -1)
             {
                 MessageBox.Show("Điểm đến này không tồn tại");
                 return;
@@ -58,11 +67,21 @@ namespace Test
 
         private void Back_Click(object sender, EventArgs e)
         {
-                
+
             ChuyenTrang(basepage);
         }
 
         private void LoadPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
         {
 
         }

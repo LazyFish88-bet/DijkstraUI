@@ -28,26 +28,30 @@ namespace Test
                 this.w = w;
             }
         };
+        public static string[] EdgesName = { "Lai Châu", "Điện Biên", "Sơn La", "Lào Cai", "Phú Thọ", "Tuyên Quang", "Hà Nội", "Ninh Bình", "Thái Nguyên", "Bắc Ninh", "Hải Phòng", "Hưng Yên", "Cao Bằng", "Lạng Sơn", "Quảng Ninh" };
         public class Diagram
         {
             private List<string> CityList = new List<string>();
+            private Dictionary<string, int> CityIndexMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+
             public void AddCity(string c)
             {
-                CityList.Add(c);
+                if (!CityIndexMap.ContainsKey(c))
+                {
+                    CityIndexMap[c] = CityList.Count;
+                    CityList.Add(c);
+                }
             }
+
             public int FindIndex(string v)
             {
-                for (int i = 0; i < CityList.Count; i++)
-                {
-                    if (CityList[i].ToLower() == v.ToLower()) return i;
-                }
-                return -1;
+                return CityIndexMap.TryGetValue(v, out int index) ? index : -1;
             }
+
             public string FindName(int u)
             {
                 return CityList[u];
             }
-
         }
         static Diagram diagram = new Diagram();
         static void Dijsktra(int n, int s, List<List<Edge>> E, long[] D)
@@ -122,14 +126,13 @@ namespace Test
             Result+=result;
         }
 
+
         private void Dijkstra_Load(object sender, EventArgs e)
         {
             Console.OutputEncoding = Encoding.UTF8;
-
-
-
             //khởi tạo các đỉnh
-            string[] EdgesName = { "a", "b", "c", "d", "e", "f" };
+            //Form1 form1 = (Form1)this.ParentForm;
+            //form1.addItemtoComboBox(EdgesName);
             for (int i = 0; i < EdgesName.Length; i++) diagram.AddCity(EdgesName[i]);
 
             //khởi tạo số điểm, điểm bắt đầu và kết thúc
@@ -145,17 +148,37 @@ namespace Test
             }
 
             //Khởi tạo đường đi
-            int[,] EdgesData = {
-                { diagram.FindIndex("a"), diagram.FindIndex("b"), 3 },
-                { diagram.FindIndex("a"), diagram.FindIndex("c"), 2 },
-                { diagram.FindIndex("a"), diagram.FindIndex("e"), 7 },
-                { diagram.FindIndex("b"), diagram.FindIndex("d"), 2 },
-                { diagram.FindIndex("b"), diagram.FindIndex("e"), 4 },
-                { diagram.FindIndex("b"), diagram.FindIndex("f"), 4 },
-                { diagram.FindIndex("c"), diagram.FindIndex("e"), 5 },
-                { diagram.FindIndex("d"), diagram.FindIndex("e"), 1 },
-                { diagram.FindIndex("d"), diagram.FindIndex("f"), 4 },
-                { diagram.FindIndex("e"), diagram.FindIndex("f"), 1 }
+            int[,] EdgesData = 
+            {
+                //Tuyến Tây Bắc - Việt Bắc
+                { diagram.FindIndex("Lai Châu"), diagram.FindIndex("Điện Biên"), 105 },
+                { diagram.FindIndex("Lai Châu"), diagram.FindIndex("Lào Cai"), 160 },
+                { diagram.FindIndex("Điện Biên"), diagram.FindIndex("Sơn La"), 155 },
+                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Sơn La"), 215 },
+                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Tuyên Quang"), 155 },
+                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Phú Thọ"), 200 },
+                //Tuyết trung tâm và Đông Bắc
+                { diagram.FindIndex("Sơn La"), diagram.FindIndex("Phú Thọ"), 210 },
+                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Phú Thọ"), 65 },
+                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Thái Nguyên"), 85 },
+                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Cao Bằng"), 220  },
+                {diagram.FindIndex("Cao Bằng"), diagram.FindIndex("Lạng Sơn"), 125 },
+                {diagram.FindIndex("Lạng Sơn"),diagram.FindIndex("Thái Nguyên"), 135 },
+                {diagram.FindIndex("Lạng Sơn"),diagram.FindIndex("Quảng Ninh"),180 },
+                {diagram.FindIndex("Lạng Sơn"),diagram.FindIndex("Bắc Ninh"),110 },
+                //Tuyến xoay quanh Thủ đô Hà Nội
+                {diagram.FindIndex("Thái Nguyên"), diagram.FindIndex("Hà Nội"),80 },
+                {diagram.FindIndex("Phú Thọ"),diagram.FindIndex("Hà Nội"),90 },
+                { diagram.FindIndex("Sơn La"),diagram.FindIndex("Hà Nội"),300},
+                {diagram.FindIndex("Hà Nội"), diagram.FindIndex("Ninh Bình"), 95 },
+                {diagram.FindIndex("Hà Nội"), diagram.FindIndex("Bắc Ninh"), 30 },
+                {diagram.FindIndex("Hà Nội"), diagram.FindIndex("Hưng Yên"), 60 },
+                //Tuyến đường duyên hải và lân cận
+                {diagram.FindIndex("Bắc Ninh"), diagram.FindIndex("Hưng Yên"),40},
+                {diagram.FindIndex("Bắc Ninh"), diagram.FindIndex("Hải Phòng"), 90 },
+                {diagram.FindIndex("Hưng Yên"), diagram.FindIndex("Hải Phòng"), 75 },
+                {diagram.FindIndex("Hưng Yên"),diagram.FindIndex("Ninh Bình"),80 },
+                {diagram.FindIndex("Hải Phòng"),diagram.FindIndex("Quảng Ninh"),45 }
             };
             //Gán các đường đi
             for (int i = 0; i < EdgesData.GetLength(0); i++)
@@ -178,7 +201,7 @@ namespace Test
 
 
             FindAllPath(start, end, D, E, new List<int>());
-            ResultLabel.Text = Result;
+            ResultLabel.Text = Result+"chiều dài quãng đường là=" + D[end]+"km";
             Result = "";
         }
 
