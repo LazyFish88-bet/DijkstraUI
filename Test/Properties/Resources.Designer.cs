@@ -73,9 +73,41 @@ namespace Test.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Arrow_Ui_Game__Logo_Ui_Vector_Illustration_Free_Logo_Design_Template__Arrow__Arrows_PNG_and_Vector_with_Transparent_Background_for_Free_Download {
+            get {
+                object obj = ResourceManager.GetObject("Arrow Ui Game, Logo Ui Vector Illustration Free Logo Design Template, Arrow, Arro" +
+                        "ws PNG and Vector with Transparent Background for Free Download", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Arrow_Ui_Game__Logo_Ui_Vector_Illustration_Free_Logo_Design_Template__Arrow__Arrows_PNG_and_Vector_with_Transparent_Background_for_Free_Download_1_ {
+            get {
+                object obj = ResourceManager.GetObject("Arrow Ui Game, Logo Ui Vector Illustration Free Logo Design Template, Arrow, Arro" +
+                        "ws PNG and Vector with Transparent Background for Free Download(1)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Back_free_icons_designed_by_Freepik_removebg_preview {
             get {
                 object obj = ResourceManager.GetObject("Back_free_icons_designed_by_Freepik-removebg-preview", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Left_Arrow_Button {
+            get {
+                object obj = ResourceManager.GetObject("Left Arrow Button", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

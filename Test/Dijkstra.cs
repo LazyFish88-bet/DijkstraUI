@@ -99,7 +99,7 @@ namespace Test
             {
                 //in ra kết quả
                 int n = newPath.Count;
-                 result="Path:\n";
+                 result="Path: ";
                 for (int i = 0; i < n; i++)
                 {
                     if (i != n - 1)
