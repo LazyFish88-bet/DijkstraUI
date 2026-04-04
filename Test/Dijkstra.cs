@@ -29,6 +29,7 @@ namespace Test
             }
         };
         public static string[] EdgesName = { "Lai Châu", "Điện Biên", "Sơn La", "Lào Cai", "Phú Thọ", "Tuyên Quang", "Hà Nội", "Ninh Bình", "Thái Nguyên", "Bắc Ninh", "Hải Phòng", "Hưng Yên", "Cao Bằng", "Lạng Sơn", "Quảng Ninh" };
+        
         public class Diagram
         {
             private List<string> CityList = new List<string>();
@@ -130,7 +131,7 @@ namespace Test
         private void Dijkstra_Load(object sender, EventArgs e)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            //khởi tạo các đỉnh
+
             //Form1 form1 = (Form1)this.ParentForm;
             //form1.addItemtoComboBox(EdgesName);
             for (int i = 0; i < EdgesName.Length; i++) diagram.AddCity(EdgesName[i]);
@@ -146,9 +147,8 @@ namespace Test
             {
                 E.Add(new List<Edge>());
             }
-
             //Khởi tạo đường đi
-            int[,] EdgesData = 
+            int[,] EdgesData =
             {
                 //Tuyến Tây Bắc - Việt Bắc
                 { diagram.FindIndex("Lai Châu"), diagram.FindIndex("Điện Biên"), 105 },

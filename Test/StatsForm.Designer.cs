@@ -28,21 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            LoadDataGridView = new Panel();
             SuspendLayout();
+            // 
+            // LoadDataGridView
+            // 
+            LoadDataGridView.Dock = DockStyle.Fill;
+            LoadDataGridView.Location = new Point(0, 0);
+            LoadDataGridView.Name = "LoadDataGridView";
+            LoadDataGridView.Size = new Size(1200, 958);
+            LoadDataGridView.TabIndex = 0;
+            LoadDataGridView.Paint += LoadDataGridView_Paint;
             // 
             // StatsForm
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = SystemColors.Info;
-            ClientSize = new Size(800, 630);
+            ClientSize = new Size(1200, 958);
+            Controls.Add(LoadDataGridView);
             FormBorderStyle = FormBorderStyle.None;
             Name = "StatsForm";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.Manual;
             Text = "StatsForm";
+            Load += StatsForm_Load;
             ResumeLayout(false);
         }
 
         #endregion
+
+        private Panel LoadDataGridView;
     }
 }

@@ -18,13 +18,14 @@ namespace Test
             ChuyenTrang(basepage);
             addItemtoComboBox(Dijkstra.EdgesName);
             thongso.Owner = this;
-            thongso.Width = 200;
+            thongso.Width = 1200;
             thongso.Hide();
             StatsCloseButton.Hide();
         }
         private void UpdateXYStatsForm()
         {
             int doDayVien = SystemInformation.CaptionHeight + SystemInformation.FrameBorderSize.Height;
+            System.Diagnostics.Debug.WriteLine("Độ dày viền là: " + doDayVien);
             thongso.Height = LoadPanel.Height - doDayVien;
             int fixX = StatsOpenButton.PointToScreen(Point.Empty).X - thongso.Width;
             int fixY = LoadPanel.PointToScreen(Point.Empty).Y;
