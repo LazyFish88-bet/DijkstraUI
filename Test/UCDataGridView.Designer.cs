@@ -33,6 +33,8 @@
             End = new DataGridViewTextBoxColumn();
             Length = new DataGridViewTextBoxColumn();
             Sort = new Button();
+            SortStart = new Button();
+            button1 = new Button();
             ((System.ComponentModel.ISupportInitialize)RouteGridVỉew).BeginInit();
             SuspendLayout();
             // 
@@ -49,7 +51,7 @@
             RouteGridVỉew.Name = "RouteGridVỉew";
             RouteGridVỉew.ReadOnly = true;
             RouteGridVỉew.RowHeadersWidth = 82;
-            RouteGridVỉew.Size = new Size(1050, 958);
+            RouteGridVỉew.Size = new Size(444, 958);
             RouteGridVỉew.TabIndex = 0;
             RouteGridVỉew.CellContentClick += RouteGridVỉew_CellContentClick;
             // 
@@ -76,23 +78,45 @@
             // 
             // Sort
             // 
-            Sort.Location = new Point(1050, 61);
+            Sort.Location = new Point(450, 59);
             Sort.Name = "Sort";
-            Sort.Size = new Size(150, 46);
+            Sort.Size = new Size(150, 50);
             Sort.TabIndex = 1;
-            Sort.Text = "Sort";
+            Sort.Text = "Sort Length";
             Sort.UseVisualStyleBackColor = true;
-            Sort.Click += BubbleSort_Click;
+            Sort.Click += BubbleSortLength_Click;
+            // 
+            // SortStart
+            // 
+            SortStart.Location = new Point(450, 154);
+            SortStart.Name = "SortStart";
+            SortStart.Size = new Size(150, 46);
+            SortStart.TabIndex = 2;
+            SortStart.Text = "Sort Start";
+            SortStart.UseVisualStyleBackColor = true;
+            SortStart.Click += SortStart_Click;
+            // 
+            // button1
+            // 
+            button1.Location = new Point(450, 253);
+            button1.Name = "button1";
+            button1.Size = new Size(150, 46);
+            button1.TabIndex = 3;
+            button1.Text = "Sort End";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += SortEnd_Click;
             // 
             // UCDataGridView
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ActiveCaption;
+            Controls.Add(button1);
+            Controls.Add(SortStart);
             Controls.Add(Sort);
             Controls.Add(RouteGridVỉew);
             Name = "UCDataGridView";
-            Size = new Size(1200, 958);
+            Size = new Size(600, 958);
             Load += UCDataGridView_Load;
             ((System.ComponentModel.ISupportInitialize)RouteGridVỉew).EndInit();
             ResumeLayout(false);
@@ -104,5 +128,7 @@
         private DataGridViewTextBoxColumn End;
         private DataGridViewTextBoxColumn Length;
         private Button Sort;
+        private Button SortStart;
+        private Button button1;
     }
 }

@@ -1,3 +1,5 @@
+using System.CodeDom.Compiler;
+
 namespace Test
 {
     public partial class Form1 : Form
@@ -18,7 +20,7 @@ namespace Test
             ChuyenTrang(basepage);
             addItemtoComboBox(Dijkstra.EdgesName);
             thongso.Owner = this;
-            thongso.Width = 1200;
+            thongso.Width = 600;
             thongso.Hide();
             StatsCloseButton.Hide();
         }
@@ -31,7 +33,34 @@ namespace Test
             int fixY = LoadPanel.PointToScreen(Point.Empty).Y;
             thongso.Location = new Point(fixX, fixY);
         }
-
+        public void SortComboBox(ComboBox comboBox)
+        {
+            int Length = comboBox.Items.Count;
+            for (int i = 0; i < Length; i++)
+            {
+                for (int j = i + 1; j < Length; j++)
+                {
+                    string itemi = comboBox.Items[i].ToString();
+                    string itemj = comboBox.Items[j].ToString();
+                    if (string.Compare(itemi, itemj) > 0)
+                    {
+                        string temp = itemi;
+                        comboBox.Items[i] = itemj;
+                        comboBox.Items[j] = temp;
+                    }
+                }
+            }
+        }
+        public void ComboBoxReverse(ComboBox comboBox)
+        {
+            int Length = comboBox.Items.Count;
+            for (int i = 0; i < Length / 2; i++)
+            {
+                string temp = comboBox.Items[i].ToString();
+                comboBox.Items[i] = comboBox.Items[Length - 1 - i].ToString();
+                comboBox.Items[Length - 1 - i] = temp;
+            }
+        }
         public void addItemtoComboBox(string[] diachi)
         {
             StartComboBox.Items.Clear();
@@ -40,6 +69,14 @@ namespace Test
             {
                 StartComboBox.Items.Add(location);
                 EndComboBox.Items.Add(location);
+            }
+        }
+        public void ComboBox_BackToDefault(ComboBox combox)
+        {
+            combox.Items.Clear();
+            foreach (string location in Dijkstra.EdgesName)
+            {
+                combox.Items.Add(location);
             }
         }
         public void ChuyenTrang(UserControl UC)
@@ -113,6 +150,10 @@ namespace Test
 
         private void Stat_Click(object sender, EventArgs e)
         {
+            if (LoadPanel.Controls[0] is BasePage)
+            {
+                thongso.LoadDataTable();
+            }
             thongso.Show();
             UpdateXYStatsForm();
             StatsOpenButton.Hide();
@@ -132,6 +173,44 @@ namespace Test
             StatsCloseButton.Hide();
             StatsOpenButton.Show();
             thongso.Hide();
+        }
+        int countSortStart = 0;
+        private void SortStartComboBox_Click(object sender, EventArgs e)
+        {
+            if (countSortStart == 0)
+            {
+                SortComboBox(StartComboBox);
+                countSortStart++;
+            }
+            else if (countSortStart == 1)
+            {
+                ComboBoxReverse(StartComboBox);
+                countSortStart++;
+            }
+            else if (countSortStart == 2)
+            {
+                countSortStart = 0;
+                ComboBox_BackToDefault(StartComboBox);
+            }
+        }
+        int countSortEnd = 0;
+        private void SortEndButton_Click(object sender, EventArgs e)
+        {
+            if (countSortEnd == 0)
+            {
+                SortComboBox(EndComboBox);
+                countSortEnd++;
+            }
+            else if (countSortEnd == 1)
+            {
+                ComboBoxReverse(EndComboBox);
+                countSortStart++;
+            }
+            else if (countSortEnd == 2)
+            {
+                countSortEnd = 0;
+               ComboBox_BackToDefault(EndComboBox);
+            }
         }
     }
 }

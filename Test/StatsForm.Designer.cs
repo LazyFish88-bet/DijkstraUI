@@ -33,10 +33,9 @@
             // 
             // LoadDataGridView
             // 
-            LoadDataGridView.Dock = DockStyle.Fill;
             LoadDataGridView.Location = new Point(0, 0);
             LoadDataGridView.Name = "LoadDataGridView";
-            LoadDataGridView.Size = new Size(1200, 958);
+            LoadDataGridView.Size = new Size(600, 958);
             LoadDataGridView.TabIndex = 0;
             LoadDataGridView.Paint += LoadDataGridView_Paint;
             // 
@@ -44,7 +43,7 @@
             // 
             AutoScaleMode = AutoScaleMode.None;
             BackColor = SystemColors.Info;
-            ClientSize = new Size(1200, 958);
+            ClientSize = new Size(600, 958);
             Controls.Add(LoadDataGridView);
             FormBorderStyle = FormBorderStyle.None;
             Name = "StatsForm";

@@ -11,26 +11,93 @@ namespace Test
 {
     public partial class Dijkstra : UserControl
     {
-     public static string Result=""; 
-        public string Start;
-        public string End;
+        public static string Result = "";
+        public string Start = "Hà Nội"; // Giá trị mặc định test
+        public string End = "Lạng Sơn"; // Giá trị mặc định test
+
         public Dijkstra()
         {
             InitializeComponent();
         }
-        public class Edge
+
+        // ==========================================
+        // CÁC CLASS MÔ HÌNH DỮ LIỆU TỪ FILE MỚI
+        // ==========================================
+
+        public class MyPriorityQueue
         {
-            public int v;
-            public long w;
-            public Edge(int v, long w)
+            private class Node
             {
-                this.v = v;
-                this.w = w;
+                public int CityIndex { get; set; }
+                public double Cost { get; set; }
             }
-        };
-        public static string[] EdgesName = { "Lai Châu", "Điện Biên", "Sơn La", "Lào Cai", "Phú Thọ", "Tuyên Quang", "Hà Nội", "Ninh Bình", "Thái Nguyên", "Bắc Ninh", "Hải Phòng", "Hưng Yên", "Cao Bằng", "Lạng Sơn", "Quảng Ninh" };
-        
-        public class Diagram
+            private List<Node> _heap = new List<Node>();
+            public int Count => _heap.Count;
+
+            public void Enqueue(int cityIndex, double cost)
+            {
+                _heap.Add(new Node { CityIndex = cityIndex, Cost = cost });
+                HeapifyUp(_heap.Count - 1);
+            }
+
+            public int Dequeue()
+            {
+                if (_heap.Count == 0) throw new InvalidOperationException("Hàng đợi rỗng!");
+                int bestCity = _heap[0].CityIndex;
+                _heap[0] = _heap[_heap.Count - 1];
+                _heap.RemoveAt(_heap.Count - 1);
+                if (_heap.Count > 0) HeapifyDown(0);
+                return bestCity;
+            }
+
+            private void HeapifyUp(int index)
+            {
+                while (index > 0)
+                {
+                    int parent = (index - 1) / 2;
+                    if (_heap[index].Cost >= _heap[parent].Cost) break;
+                    Swap(index, parent);
+                    index = parent;
+                }
+            }
+
+            private void HeapifyDown(int index)
+            {
+                while (true)
+                {
+                    int smallest = index;
+                    int left = 2 * index + 1;
+                    int right = 2 * index + 2;
+                    if (left < _heap.Count && _heap[left].Cost < _heap[smallest].Cost) smallest = left;
+                    if (right < _heap.Count && _heap[right].Cost < _heap[smallest].Cost) smallest = right;
+                    if (smallest == index) break;
+                    Swap(index, smallest);
+                    index = smallest;
+                }
+            }
+
+            private void Swap(int i, int j)
+            {
+                var temp = _heap[i];
+                _heap[i] = _heap[j];
+                _heap[j] = temp;
+            }
+        }
+
+        public class Route
+        {
+            public int TargetCityIndex { get; set; }
+            public double Distance { get; set; }
+            public double TollFee { get; set; }
+            public Route(int targetIndex, double distance, double tollFee)
+            {
+                this.TargetCityIndex = targetIndex;
+                this.Distance = distance;
+                this.TollFee = tollFee;
+            }
+        }
+
+        public class RouteDiagram
         {
             private List<string> CityList = new List<string>();
             private Dictionary<string, int> CityIndexMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -54,160 +121,245 @@ namespace Test
                 return CityList[u];
             }
         }
-        static Diagram diagram = new Diagram();
-        static void Dijsktra(int n, int s, List<List<Edge>> E, long[] D)
+
+        public class Vehicles
         {
-            //khởi tạo D
-            for (int i = 0; i < n; i++)
+            public string Name { get; set; }
+            public double FuelEmpty { get; set; }
+            public double PLoad { get; set; }
+
+            public Vehicles(string name, double fe, double pl)
             {
-                D[i] = long.MaxValue;
+                Name = name;
+                FuelEmpty = fe;
+                PLoad = pl;
             }
-            D[s] = 0;
-            //Khởi tạo P[] = false 
-            bool[] P = new bool[n];
+        }
 
-            //Khởi tạo priority queue và thêm đỉnh đầu tiên
-            PriorityQueue<int, long> pq = new PriorityQueue<int, long>();
-            pq.Enqueue(s, 0);
+        public class CityNode
+        {
+            public double MinCost { get; set; } = double.MaxValue;
+            public int ParentIndex { get; set; } = -1;
+            public bool IsVisited { get; set; } = false;
+        }
 
-            while (pq.Count > 0)
+        public class Graph
+        {
+            public List<CityNode> nodes;
+            public List<List<Route>> adjList;
+
+            public Graph()
             {
-                int index = pq.Dequeue();
+                nodes = new List<CityNode>();
+                adjList = new List<List<Route>>();
+            }
 
-                //Gán biến và đánh dấu
-                int u = index;
-                P[u] = true;
-                foreach (Edge x in E[u])
+            public void AddCity()
+            {
+                nodes.Add(new CityNode());
+                adjList.Add(new List<Route>());
+            }
+
+            public void AddRoute(int u, int v, double distance, double toll)
+            {
+                if (u < adjList.Count && v < adjList.Count)
                 {
-                    int v = x.v;
-                    long w = x.w;
-                    if (D[v] > D[u] + w)
+                    adjList[u].Add(new Route(v, distance, toll));
+                    adjList[v].Add(new Route(u, distance, toll));
+                }
+            }
+
+            public double CalculateCost(Route route, Vehicles car, double cargoWeight, double fuelPrice)
+            {
+                const long stableCost = 24000;
+                double fuelCost = (route.Distance / 100) * (car.FuelEmpty + (cargoWeight * car.PLoad)) * fuelPrice;
+                double distanceCost = route.Distance * cargoWeight * stableCost;
+                return fuelCost + distanceCost + route.TollFee;
+            }
+
+            public void RunDijkstra(int startCityIndex, Vehicles car, double cargoWeight, double fuelPrice)
+            {
+                foreach (var node in nodes)
+                {
+                    node.MinCost = double.MaxValue;
+                    node.IsVisited = false;
+                    node.ParentIndex = -1;
+                }
+                nodes[startCityIndex].MinCost = 0;
+
+                MyPriorityQueue pq = new MyPriorityQueue();
+                pq.Enqueue(startCityIndex, 0);
+
+                while (pq.Count > 0)
+                {
+                    int u = pq.Dequeue();
+                    if (nodes[u].IsVisited) continue;
+                    nodes[u].IsVisited = true;
+
+                    foreach (var route in adjList[u])
                     {
-                        D[v] = D[u] + w;
-                        pq.Enqueue(v, D[v]);
+                        int v = route.TargetCityIndex;
+                        if (nodes[v].IsVisited) continue;
+
+                        double weight = CalculateCost(route, car, cargoWeight, fuelPrice);
+                        if (nodes[v].MinCost > nodes[u].MinCost + weight)
+                        {
+                            nodes[v].MinCost = nodes[u].MinCost + weight;
+                            nodes[v].ParentIndex = u;
+                            pq.Enqueue(v, nodes[v].MinCost);
+                        }
+                    }
+                }
+            }
+
+            // Đã chuyển đổi từ Console.Write sang cộng chuỗi để hiển thị trên UI WinForms
+            public void GetTripSummary(int startIndex, int targetIndex, RouteDiagram diagram, List<int> currentPath, Vehicles car, double cargoWeight, double fuelPrice, ref string output)
+            {
+                
+                List<int> path = new List<int>(currentPath);
+                path.Add(targetIndex);
+
+                if (startIndex == targetIndex)
+                {
+                    int n = path.Count;
+                    output += "Lộ trình: ";
+                    for (int i = n - 1; i >= 0; i--)
+                    {
+                        output += diagram.FindName(path[i]);
+                        if (i != 0) output += " -> ";
+                    }
+                    output += "\r\n";
+                }
+                else
+                {
+                    foreach (Route x in adjList[targetIndex])
+                    {
+                        int v = x.TargetCityIndex;
+                        double w = CalculateCost(x, car, cargoWeight, fuelPrice);
+
+                        // Cho phép các con đường có cost nhỉnh hơn 5%
+                        if ((nodes[v].MinCost + w) <= nodes[targetIndex].MinCost * 1.05)
+                        {
+                            GetTripSummary(startIndex, v, diagram, path, car, cargoWeight, fuelPrice, ref output);
+                        }
                     }
                 }
             }
         }
 
-        static void FindAllPath(int s, int e, long[] D, List<List<Edge>> E, List<int> currentPath)
-        {
-            //xét từ điểm cuối
-            List<int> newPath = new List<int>(currentPath);
-            newPath.Add(e);
-            string result = "";
-            if (s == e)
-            {
-                //in ra kết quả
-                int n = newPath.Count;
-                 result="Path: ";
-                for (int i = 0; i < n; i++)
-                {
-                    if (i != n - 1)
-                    {
-                        result+=diagram.FindName(newPath[n - i - 1]) + " -> ";
-                    }
-                    else
-                    { result+=diagram.FindName(newPath[n - i - 1])+"\n"; }
-                }
-            }
-            else
-            {
-                //dùng DFS đệ quy backtracking
-                foreach (Edge x in E[e])
-                {
-                    int v = x.v;
-                    long w = x.w;
-                    if (D[e] == D[v] + w)
-                    {
-                        FindAllPath(s, v, D, E, newPath);
-                    }
-                }
-            }
-            Result+=result;
-        }
+        // ==========================================
+        // KHỞI TẠO VÀ THỰC THI TRÊN UI
+        // ==========================================
 
+        public static string[] EdgesName = { "Lai Châu", "Điện Biên", "Sơn La", "Lào Cai", "Phú Thọ", "Tuyên Quang", "Hà Nội", "Ninh Bình", "Thái Nguyên", "Bắc Ninh", "Hải Phòng", "Hưng Yên", "Cao Bằng", "Lạng Sơn", "Quảng Ninh" };
 
         private void Dijkstra_Load(object sender, EventArgs e)
         {
-            Console.OutputEncoding = Encoding.UTF8;
+            // Các thông số giả định (Sau này bạn có thể gán bằng các TextBox/ComboBox trên Form)
+            Vehicles currentVehicle = new Vehicles("Xe tải trung", 18.0, 1.5);
+            double currentCargoWeight = 5.0; // Tấn
+            double currentFuelPrice = 24000; // VNĐ/lít
 
-            //Form1 form1 = (Form1)this.ParentForm;
-            //form1.addItemtoComboBox(EdgesName);
-            for (int i = 0; i < EdgesName.Length; i++) diagram.AddCity(EdgesName[i]);
+            RouteDiagram diagram = new RouteDiagram();
+            Graph graph = new Graph();
 
-            //khởi tạo số điểm, điểm bắt đầu và kết thúc
-            int n = EdgesName.Length;
-            int start=diagram.FindIndex(Start);
-            int end=diagram.FindIndex(End);
-
-            // Tạo từng danh sách các điếm đến 
-            List<List<Edge>> E = new List<List<Edge>>();
-            for (int i = 0; i < n; i++)
+            // Nạp thành phố
+            for (int i = 0; i < EdgesName.Length; i++)
             {
-                E.Add(new List<Edge>());
+                diagram.AddCity(EdgesName[i]);
+                graph.AddCity();
             }
-            //Khởi tạo đường đi
-            int[,] EdgesData =
+
+            int start = diagram.FindIndex(Start);
+            int end = diagram.FindIndex(End);
+
+            if (start == -1 || end == -1)
             {
-                //Tuyến Tây Bắc - Việt Bắc
-                { diagram.FindIndex("Lai Châu"), diagram.FindIndex("Điện Biên"), 105 },
-                { diagram.FindIndex("Lai Châu"), diagram.FindIndex("Lào Cai"), 160 },
-                { diagram.FindIndex("Điện Biên"), diagram.FindIndex("Sơn La"), 155 },
-                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Sơn La"), 215 },
-                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Tuyên Quang"), 155 },
-                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Phú Thọ"), 200 },
-                //Tuyết trung tâm và Đông Bắc
-                { diagram.FindIndex("Sơn La"), diagram.FindIndex("Phú Thọ"), 210 },
-                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Phú Thọ"), 65 },
-                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Thái Nguyên"), 85 },
-                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Cao Bằng"), 220  },
-                {diagram.FindIndex("Cao Bằng"), diagram.FindIndex("Lạng Sơn"), 125 },
-                {diagram.FindIndex("Lạng Sơn"),diagram.FindIndex("Thái Nguyên"), 135 },
-                {diagram.FindIndex("Lạng Sơn"),diagram.FindIndex("Quảng Ninh"),180 },
-                {diagram.FindIndex("Lạng Sơn"),diagram.FindIndex("Bắc Ninh"),110 },
-                //Tuyến xoay quanh Thủ đô Hà Nội
-                {diagram.FindIndex("Thái Nguyên"), diagram.FindIndex("Hà Nội"),80 },
-                {diagram.FindIndex("Phú Thọ"),diagram.FindIndex("Hà Nội"),90 },
-                { diagram.FindIndex("Sơn La"),diagram.FindIndex("Hà Nội"),300},
-                {diagram.FindIndex("Hà Nội"), diagram.FindIndex("Ninh Bình"), 95 },
-                {diagram.FindIndex("Hà Nội"), diagram.FindIndex("Bắc Ninh"), 30 },
-                {diagram.FindIndex("Hà Nội"), diagram.FindIndex("Hưng Yên"), 60 },
-                //Tuyến đường duyên hải và lân cận
-                {diagram.FindIndex("Bắc Ninh"), diagram.FindIndex("Hưng Yên"),40},
-                {diagram.FindIndex("Bắc Ninh"), diagram.FindIndex("Hải Phòng"), 90 },
-                {diagram.FindIndex("Hưng Yên"), diagram.FindIndex("Hải Phòng"), 75 },
-                {diagram.FindIndex("Hưng Yên"),diagram.FindIndex("Ninh Bình"),80 },
-                {diagram.FindIndex("Hải Phòng"),diagram.FindIndex("Quảng Ninh"),45 }
+                ResultLabel.Text = "Lỗi: Không tìm thấy điểm đi hoặc điểm đến trong danh sách.";
+                return;
+            }
+
+            // Khởi tạo đường đi { Index_U, Index_V, Distance, TollFee }
+            // Lưu ý: Cột thứ 4 (TollFee) đang để 0, bạn có thể điền phí trạm thu giá thực tế.
+            double[,] EdgesData =
+            {
+                { diagram.FindIndex("Lai Châu"), diagram.FindIndex("Điện Biên"), 105, 0 },
+                { diagram.FindIndex("Lai Châu"), diagram.FindIndex("Lào Cai"), 160, 0 },
+                { diagram.FindIndex("Điện Biên"), diagram.FindIndex("Sơn La"), 155, 0 },
+                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Sơn La"), 215, 0 },
+                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Tuyên Quang"), 155, 0 },
+                { diagram.FindIndex("Lào Cai"), diagram.FindIndex("Phú Thọ"), 200, 0 },
+                { diagram.FindIndex("Sơn La"), diagram.FindIndex("Phú Thọ"), 210, 0 },
+                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Phú Thọ"), 65, 0 },
+                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Thái Nguyên"), 85, 0 },
+                { diagram.FindIndex("Tuyên Quang"), diagram.FindIndex("Cao Bằng"), 220, 0 },
+                { diagram.FindIndex("Cao Bằng"), diagram.FindIndex("Lạng Sơn"), 125, 0 },
+                { diagram.FindIndex("Lạng Sơn"), diagram.FindIndex("Thái Nguyên"), 135, 0 },
+                { diagram.FindIndex("Lạng Sơn"), diagram.FindIndex("Quảng Ninh"), 180, 0 },
+                { diagram.FindIndex("Lạng Sơn"), diagram.FindIndex("Bắc Ninh"), 110, 0 },
+                { diagram.FindIndex("Thái Nguyên"), diagram.FindIndex("Hà Nội"), 80, 0 },
+                { diagram.FindIndex("Phú Thọ"), diagram.FindIndex("Hà Nội"), 90, 0 },
+                { diagram.FindIndex("Sơn La"), diagram.FindIndex("Hà Nội"), 300, 0 },
+                { diagram.FindIndex("Hà Nội"), diagram.FindIndex("Ninh Bình"), 95, 0 },
+                { diagram.FindIndex("Hà Nội"), diagram.FindIndex("Bắc Ninh"), 30, 0 },
+                { diagram.FindIndex("Hà Nội"), diagram.FindIndex("Hưng Yên"), 60, 0 },
+                { diagram.FindIndex("Bắc Ninh"), diagram.FindIndex("Hưng Yên"), 40, 0 },
+                { diagram.FindIndex("Bắc Ninh"), diagram.FindIndex("Hải Phòng"), 90, 0 },
+                { diagram.FindIndex("Hưng Yên"), diagram.FindIndex("Hải Phòng"), 75, 0 },
+                { diagram.FindIndex("Hưng Yên"), diagram.FindIndex("Ninh Bình"), 80, 0 },
+                { diagram.FindIndex("Hải Phòng"), diagram.FindIndex("Quảng Ninh"), 45, 0 }
             };
-            //Gán các đường đi
+
+            // Nạp dữ liệu vào Graph
             for (int i = 0; i < EdgesData.GetLength(0); i++)
             {
-                int u = EdgesData[i, 0];
-                int v = EdgesData[i, 1];
-                long w = EdgesData[i, 2];
-                if (u < n)
+                int u = (int)EdgesData[i, 0];
+                int v = (int)EdgesData[i, 1];
+                double dist = EdgesData[i, 2];
+                double toll = EdgesData[i, 3];
+
+                if (u < graph.nodes.Count && v < graph.nodes.Count)
                 {
-                    //2 chiều
-                    E[u].Add(new Edge(v, w));
-                    E[v].Add(new Edge(u, w));
+                    graph.AddRoute(u, v, dist, toll);
                 }
             }
 
-            //khởi tạo D: khoảng cách min từ điểm đầu đến vị trí đó
-            long[] D = new long[n];
+            // Chạy Dijkstra
+            graph.RunDijkstra(start, currentVehicle, currentCargoWeight, currentFuelPrice);
 
-            Dijsktra(n, start, E, D);
+            // In kết quả
+            string outputPaths = "";
+            graph.GetTripSummary(start, end, diagram, new List<int>(), currentVehicle, currentCargoWeight, currentFuelPrice, ref outputPaths);
 
+            // Truy ngược lộ trình tối ưu nhất từ điểm đích về điểm đầu để tính tổng quãng đường (km)
+            double totalDistance = 0;
+            int currNode = end;
+            while (graph.nodes[currNode].ParentIndex != -1)
+            {
+                int parentNode = graph.nodes[currNode].ParentIndex;
 
-            FindAllPath(start, end, D, E, new List<int>());
-            ResultLabel.Text = Result+"chiều dài quãng đường là=" + D[end]+"km";
-            Result = "";
+                // Tìm thông tin tuyến đường nối giữa parentNode và currNode để lấy Distance
+                foreach (var route in graph.adjList[parentNode])
+                {
+                    if (route.TargetCityIndex == currNode)
+                    {
+                        totalDistance += route.Distance;
+                        break; // Thoát vòng lặp khi đã tìm thấy tuyến nối
+                    }
+                }
+                currNode = parentNode; // Lùi về trạm trước đó
+            }
+            double totalCost = graph.nodes[end].MinCost;
+
+            ResultLabel.Text = $"--- KẾT QUẢ HÀNH TRÌNH ---\r\n" +
+                               $"{outputPaths}\r\n" + $"Chiều dài quãng đường là:" + totalDistance + " km\n" +
+                               $"Tổng chi phí tối ưu: {totalCost:N0} VNĐ";
         }
 
         private void ResultLabel_Click(object sender, EventArgs e)
         {
-
+            // Xử lý event click nếu cần
         }
+
     }
 }
