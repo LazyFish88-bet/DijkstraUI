@@ -110,9 +110,16 @@ namespace Test
                 MessageBox.Show("Điểm đến này không tồn tại");
                 return;
             }
+            if (FuelPriceBox.Text=="")
+            {
+                MessageBox.Show("Hãy nhập giá xăng");
+                return;
+            }
+            int fuelPrice = int.Parse(FuelPriceBox.Text);
             Dijkstra dijkstra = new Dijkstra();
             dijkstra.Start = start;
             dijkstra.End = end;
+            dijkstra.FuelPrice = fuelPrice;
             basepage.Run(dijkstra);
 
         }

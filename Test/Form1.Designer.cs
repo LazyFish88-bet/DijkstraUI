@@ -41,6 +41,8 @@
             StatsCloseButton = new PictureBox();
             pictureBox3 = new PictureBox();
             pictureBox4 = new PictureBox();
+            FuelPriceBox = new TextBox();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)StatsOpenButton).BeginInit();
@@ -183,11 +185,31 @@
             pictureBox4.TabIndex = 11;
             pictureBox4.TabStop = false;
             // 
+            // FuelPriceBox
+            // 
+            FuelPriceBox.Font = new Font("Times New Roman", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            FuelPriceBox.Location = new Point(1555, 502);
+            FuelPriceBox.Name = "FuelPriceBox";
+            FuelPriceBox.Size = new Size(200, 63);
+            FuelPriceBox.TabIndex = 12;
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Times New Roman", 13.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label3.Location = new Point(1555, 445);
+            label3.Name = "label3";
+            label3.Size = new Size(149, 42);
+            label3.TabIndex = 13;
+            label3.Text = "Giá xăng";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1895, 1010);
+            Controls.Add(label3);
+            Controls.Add(FuelPriceBox);
             Controls.Add(pictureBox4);
             Controls.Add(pictureBox3);
             Controls.Add(StatsCloseButton);
@@ -232,5 +254,7 @@
         private PictureBox StatsCloseButton;
         private PictureBox pictureBox3;
         private PictureBox pictureBox4;
+        private TextBox FuelPriceBox;
+        private Label label3;
     }
 }

@@ -14,6 +14,7 @@ namespace Test
         public static string Result = "";
         public string Start = "Hà Nội"; // Giá trị mặc định test
         public string End = "Lạng Sơn"; // Giá trị mặc định test
+        public int FuelPrice = 0;
 
         public Dijkstra()
         {
@@ -171,7 +172,7 @@ namespace Test
 
             public double CalculateCost(Route route, Vehicles car, double cargoWeight, double fuelPrice)
             {
-                const long stableCost = 24000;
+                const long stableCost = 3000;
                 double fuelCost = (route.Distance / 100) * (car.FuelEmpty + (cargoWeight * car.PLoad)) * fuelPrice;
                 double distanceCost = route.Distance * cargoWeight * stableCost;
                 return fuelCost + distanceCost + route.TollFee;
@@ -258,7 +259,7 @@ namespace Test
             // Các thông số giả định (Sau này bạn có thể gán bằng các TextBox/ComboBox trên Form)
             Vehicles currentVehicle = new Vehicles("Xe tải trung", 18.0, 1.5);
             double currentCargoWeight = 5.0; // Tấn
-            double currentFuelPrice = 24000; // VNĐ/lít
+            double currentFuelPrice = FuelPrice ; // VNĐ/lít
 
             RouteDiagram diagram = new RouteDiagram();
             Graph graph = new Graph();
