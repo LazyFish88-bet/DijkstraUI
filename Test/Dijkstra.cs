@@ -20,6 +20,46 @@ namespace Test
         {
             InitializeComponent();
         }
+        public static void SelectionSort(string[] arr)
+        {
+            int n = arr.Length;
+            for (int i = 0; i < n - 1; i++)
+            {
+                // Tìm phần tử nhỏ nhất trong mảng chưa sắp xếp
+                int min_idx = i;
+                for (int j = i + 1; j < n; j++)
+                {
+                    // string.Compare trả về < 0 nếu chuỗi arr[j] đứng trước chuỗi arr[min_idx]
+                    if (string.Compare(arr[j], arr[min_idx], StringComparison.OrdinalIgnoreCase) < 0)
+                    {
+                        min_idx = j;
+                    }
+                }
+
+                // Hoán vị phần tử nhỏ nhất với phần tử đầu tiên của mảng chưa sắp xếp
+                string temp = arr[min_idx];
+                arr[min_idx] = arr[i];
+                arr[i] = temp;
+            }
+        }
+        // 2. SHELL SORT - Sắp xếp mảng 2 chiều EdgesData theo Khoảng cách
+        public static void ShellSortEdges(double[,] edges)
+        {
+            int n = edges.GetLength(0);
+            for (int gap = n / 2; gap > 0; gap /= 2)
+            {
+                for (int i = gap; i < n; i++)
+                {
+                    double[] temp = { edges[i, 0], edges[i, 1], edges[i, 2], edges[i, 3] };
+                    int j;
+                    for (j = i; j >= gap && edges[j - gap, 2] > temp[2]; j -= gap)
+                    {
+                        for (int k = 0; k < 4; k++) edges[j, k] = edges[j - gap, k];
+                    }
+                    for (int k = 0; k < 4; k++) edges[j, k] = temp[k];
+                }
+            }
+        }
 
         // ==========================================
         // CÁC CLASS MÔ HÌNH DỮ LIỆU TỪ FILE MỚI
@@ -102,7 +142,31 @@ namespace Test
         {
             private List<string> CityList = new List<string>();
             private Dictionary<string, int> CityIndexMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            public void InsertionSortCities()
+            {
+                int n = CityList.Count;
+                for (int i = 1; i < n; ++i)
+                {
+                    string key = CityList[i];
+                    int j = i - 1;
 
+                    // Di chuyển các phần tử lớn hơn key về sau 1 vị trí
+                    while (j >= 0 && string.Compare(CityList[j], key, StringComparison.OrdinalIgnoreCase) > 0)
+                    {
+                        CityList[j + 1] = CityList[j];
+                        j = j - 1;
+                    }
+                    CityList[j + 1] = key;
+                }
+
+                // Sau khi CityList đã được sắp xếp, ta phải làm mới lại Dictionary
+                // để cập nhật Index mới tương ứng cho từng thành phố
+                CityIndexMap.Clear();
+                for (int i = 0; i < CityList.Count; i++)
+                {
+                    CityIndexMap[CityList[i]] = i;
+                }
+            }
             public void AddCity(string c)
             {
                 if (!CityIndexMap.ContainsKey(c))
@@ -169,7 +233,52 @@ namespace Test
                     adjList[v].Add(new Route(u, distance, toll));
                 }
             }
+            //  QUICK SORT CHO CLASS GRAPH
 
+            public void SortAllAdjacencyLists()
+            {
+                foreach (var list in adjList)
+                {
+                    if (list.Count > 1)
+                    {
+                        QuickSortRoutes(list, 0, list.Count - 1);
+                    }
+                }
+            }
+
+            private void QuickSortRoutes(List<Route> list, int low, int high)
+            {
+                if (low < high)
+                {
+                    int pi = Partition(list, low, high);
+                    QuickSortRoutes(list, low, pi - 1);
+                    QuickSortRoutes(list, pi + 1, high);
+                }
+            }
+
+            private int Partition(List<Route> list, int low, int high)
+            {
+                double pivot = list[high].Distance; // Chọn pivot là chiều dài quãng đường
+                int i = (low - 1);
+
+                for (int j = low; j < high; j++)
+                {
+                    if (list[j].Distance < pivot)
+                    {
+                        i++;
+                        // Hoán vị
+                        Route temp = list[i];
+                        list[i] = list[j];
+                        list[j] = temp;
+                    }
+                }
+                // Đưa pivot về đúng vị trí
+                Route temp1 = list[i + 1];
+                list[i + 1] = list[high];
+                list[high] = temp1;
+
+                return i + 1;
+            }
             public double CalculateCost(Route route, Vehicles car, double cargoWeight, double fuelPrice)
             {
                 const long stableCost = 3000;
@@ -310,7 +419,8 @@ namespace Test
                 { diagram.FindIndex("Hưng Yên"), diagram.FindIndex("Ninh Bình"), 80, 0 },
                 { diagram.FindIndex("Hải Phòng"), diagram.FindIndex("Quảng Ninh"), 45, 0 }
             };
-
+            // Sắp xếp các tuyến đường từ ngắn đến dài
+            ShellSortEdges(EdgesData);
             // Nạp dữ liệu vào Graph
             for (int i = 0; i < EdgesData.GetLength(0); i++)
             {
@@ -324,6 +434,17 @@ namespace Test
                     graph.AddRoute(u, v, dist, toll);
                 }
             }
+            // CHÈN QUICK SORT: Sắp xếp các danh sách lân cận bên trong Graph
+            graph.SortAllAdjacencyLists();
+
+            SelectionSort(EdgesName); // Sắp xếp mảng chuỗi
+
+            for (int i = 0; i < EdgesName.Length; i++)
+            {
+                diagram.AddCity(EdgesName[i]);
+            }
+
+            diagram.InsertionSortCities(); // Sắp xếp danh sách Dictionary bên trong
 
             // Chạy Dijkstra
             graph.RunDijkstra(start, currentVehicle, currentCargoWeight, currentFuelPrice);
