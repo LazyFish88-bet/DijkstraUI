@@ -19,6 +19,7 @@ namespace Test
         {
             ChuyenTrang(basepage);
             addItemtoComboBox(Dijkstra.EdgesName);
+            //Luôn luôn cho form thông số đè lên form chính
             thongso.Owner = this;
             thongso.Width = 600;
             thongso.Hide();
@@ -110,6 +111,11 @@ namespace Test
                 MessageBox.Show("Điểm đến này không tồn tại");
                 return;
             }
+            if (start==end)
+            {
+               MessageBox.Show("Điểm bắt đầu và điểm đến không được trùng nhau");
+                return;
+            }
             if (FuelPriceBox.Text=="")
             {
                 MessageBox.Show("Hãy nhập giá xăng");
@@ -184,16 +190,19 @@ namespace Test
         int countSortStart = 0;
         private void SortStartComboBox_Click(object sender, EventArgs e)
         {
+            //Sort theo A-Z
             if (countSortStart == 0)
             {
                 SortComboBox(StartComboBox);
                 countSortStart++;
             }
+            //Sort theo Z-A
             else if (countSortStart == 1)
             {
                 ComboBoxReverse(StartComboBox);
                 countSortStart++;
             }
+
             else if (countSortStart == 2)
             {
                 countSortStart = 0;
@@ -203,16 +212,19 @@ namespace Test
         int countSortEnd = 0;
         private void SortEndButton_Click(object sender, EventArgs e)
         {
+            //Sort theo A-Z
             if (countSortEnd == 0)
             {
                 SortComboBox(EndComboBox);
                 countSortEnd++;
             }
+            //Sort theo Z-A
             else if (countSortEnd == 1)
             {
                 ComboBoxReverse(EndComboBox);
-                countSortStart++;
+                countSortEnd++;
             }
+            //Trở về mặc định
             else if (countSortEnd == 2)
             {
                 countSortEnd = 0;

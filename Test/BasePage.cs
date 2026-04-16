@@ -28,19 +28,24 @@ namespace Test
         public void Run(UserControl UC)
         {
             ProgressBarTimer.Start();
-           UCDestination = UC; 
+            UCDestination = UC;
         }
 
         private void ProgressBarTimer_Tick(object sender, EventArgs e)
         {
             progressBar1.Value += 2;
-            if (progressBar1.Value==100)
+            if (progressBar1.Value == 100)
             {
                 progressBar1.Value = 0;
                 ProgressBarTimer.Stop();
-                Form1 form1=(Form1)this.ParentForm;
+                Form1 form1 = (Form1)this.ParentForm;
                 form1.ChuyenTrang(UCDestination);
             }
+        }
+
+        private void BasePage_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }
