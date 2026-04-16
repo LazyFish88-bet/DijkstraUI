@@ -53,9 +53,10 @@
             // 
             // LoadPanel
             // 
-            LoadPanel.Location = new Point(148, 14);
+            LoadPanel.Location = new Point(91, 9);
+            LoadPanel.Margin = new Padding(2, 2, 2, 2);
             LoadPanel.Name = "LoadPanel";
-            LoadPanel.Size = new Size(1401, 1008);
+            LoadPanel.Size = new Size(862, 630);
             LoadPanel.TabIndex = 0;
             LoadPanel.Paint += LoadPanel_Paint;
             // 
@@ -63,9 +64,10 @@
             // 
             Title.AutoSize = true;
             Title.Font = new Font("Times New Roman", 30F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            Title.Location = new Point(1555, 14);
+            Title.Location = new Point(957, 9);
+            Title.Margin = new Padding(2, 0, 2, 0);
             Title.Name = "Title";
-            Title.Size = new Size(296, 90);
+            Title.Size = new Size(183, 57);
             Title.TabIndex = 1;
             Title.Text = "Dijkstra";
             Title.Click += Title_Click;
@@ -74,9 +76,10 @@
             // 
             pictureBox1.BackgroundImageLayout = ImageLayout.None;
             pictureBox1.Image = Properties.Resources._279c187529c8ea8f2ef918b9778c9c02;
-            pictureBox1.Location = new Point(1573, 814);
+            pictureBox1.Location = new Point(968, 509);
+            pictureBox1.Margin = new Padding(2, 2, 2, 2);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(229, 125);
+            pictureBox1.Size = new Size(141, 78);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 3;
             pictureBox1.TabStop = false;
@@ -85,9 +88,10 @@
             // pictureBox2
             // 
             pictureBox2.Image = Properties.Resources.Back_free_icons_designed_by_Freepik_removebg_preview;
-            pictureBox2.Location = new Point(1570, 808);
+            pictureBox2.Location = new Point(966, 505);
+            pictureBox2.Margin = new Padding(2, 2, 2, 2);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(232, 131);
+            pictureBox2.Size = new Size(143, 82);
             pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox2.TabIndex = 0;
             pictureBox2.TabStop = false;
@@ -97,9 +101,10 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Times New Roman", 13.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(1573, 133);
+            label1.Location = new Point(968, 83);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(86, 42);
+            label1.Size = new Size(57, 27);
             label1.TabIndex = 4;
             label1.Text = "Start";
             label1.Click += label1_Click;
@@ -108,9 +113,10 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Times New Roman", 13.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label2.Location = new Point(1573, 278);
+            label2.Location = new Point(968, 174);
+            label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(78, 42);
+            label2.Size = new Size(51, 27);
             label2.TabIndex = 5;
             label2.Text = "End";
             label2.Click += label2_Click;
@@ -121,9 +127,10 @@
             StartComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             StartComboBox.Font = new Font("Times New Roman", 20F, FontStyle.Regular, GraphicsUnit.Point, 0);
             StartComboBox.FormattingEnabled = true;
-            StartComboBox.Location = new Point(1546, 178);
+            StartComboBox.Location = new Point(951, 111);
+            StartComboBox.Margin = new Padding(2, 2, 2, 2);
             StartComboBox.Name = "StartComboBox";
-            StartComboBox.Size = new Size(256, 69);
+            StartComboBox.Size = new Size(159, 45);
             StartComboBox.TabIndex = 6;
             StartComboBox.SelectedIndexChanged += StartComboBox_SelectedIndexChanged;
             // 
@@ -133,19 +140,19 @@
             EndComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
             EndComboBox.Font = new Font("Times New Roman", 19.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
             EndComboBox.FormattingEnabled = true;
-            EndComboBox.Location = new Point(1546, 340);
+            EndComboBox.Location = new Point(951, 212);
+            EndComboBox.Margin = new Padding(2, 2, 2, 2);
             EndComboBox.Name = "EndComboBox";
-            EndComboBox.Size = new Size(256, 69);
+            EndComboBox.Size = new Size(159, 45);
             EndComboBox.TabIndex = 7;
             // 
             // StatsOpenButton
             // 
             StatsOpenButton.BackgroundImageLayout = ImageLayout.Zoom;
             StatsOpenButton.Image = Properties.Resources.Arrow_Ui_Game__Logo_Ui_Vector_Illustration_Free_Logo_Design_Template__Arrow__Arrows_PNG_and_Vector_with_Transparent_Background_for_Free_Download;
-            StatsOpenButton.Location = new Point(72, 491);
-            StatsOpenButton.Margin = new Padding(5);
+            StatsOpenButton.Location = new Point(44, 307);
             StatsOpenButton.Name = "StatsOpenButton";
-            StatsOpenButton.Size = new Size(68, 78);
+            StatsOpenButton.Size = new Size(42, 49);
             StatsOpenButton.SizeMode = PictureBoxSizeMode.Zoom;
             StatsOpenButton.TabIndex = 8;
             StatsOpenButton.TabStop = false;
@@ -155,10 +162,9 @@
             // 
             StatsCloseButton.BackgroundImage = (Image)resources.GetObject("StatsCloseButton.BackgroundImage");
             StatsCloseButton.Image = Properties.Resources.Arrow_Ui_Game__Logo_Ui_Vector_Illustration_Free_Logo_Design_Template__Arrow__Arrows_PNG_and_Vector_with_Transparent_Background_for_Free_Download_1_;
-            StatsCloseButton.Location = new Point(72, 491);
-            StatsCloseButton.Margin = new Padding(5);
+            StatsCloseButton.Location = new Point(44, 307);
             StatsCloseButton.Name = "StatsCloseButton";
-            StatsCloseButton.Size = new Size(68, 78);
+            StatsCloseButton.Size = new Size(42, 49);
             StatsCloseButton.SizeMode = PictureBoxSizeMode.Zoom;
             StatsCloseButton.TabIndex = 9;
             StatsCloseButton.TabStop = false;
@@ -167,9 +173,10 @@
             // pictureBox3
             // 
             pictureBox3.Image = Properties.Resources.sortbutton;
-            pictureBox3.Location = new Point(1819, 178);
+            pictureBox3.Location = new Point(1119, 111);
+            pictureBox3.Margin = new Padding(2, 2, 2, 2);
             pictureBox3.Name = "pictureBox3";
-            pictureBox3.Size = new Size(64, 69);
+            pictureBox3.Size = new Size(39, 43);
             pictureBox3.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox3.TabIndex = 10;
             pictureBox3.TabStop = false;
@@ -178,9 +185,10 @@
             // pictureBox4
             // 
             pictureBox4.Image = Properties.Resources.sortbutton;
-            pictureBox4.Location = new Point(1819, 340);
+            pictureBox4.Location = new Point(1119, 212);
+            pictureBox4.Margin = new Padding(2, 2, 2, 2);
             pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(64, 69);
+            pictureBox4.Size = new Size(39, 43);
             pictureBox4.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox4.TabIndex = 11;
             pictureBox4.TabStop = false;
@@ -188,26 +196,28 @@
             // FuelPriceBox
             // 
             FuelPriceBox.Font = new Font("Times New Roman", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            FuelPriceBox.Location = new Point(1555, 502);
+            FuelPriceBox.Location = new Point(957, 314);
+            FuelPriceBox.Margin = new Padding(2, 2, 2, 2);
             FuelPriceBox.Name = "FuelPriceBox";
-            FuelPriceBox.Size = new Size(200, 63);
+            FuelPriceBox.Size = new Size(125, 42);
             FuelPriceBox.TabIndex = 12;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Times New Roman", 13.875F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label3.Location = new Point(1555, 445);
+            label3.Location = new Point(957, 278);
+            label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new Size(149, 42);
+            label3.Size = new Size(98, 27);
             label3.TabIndex = 13;
             label3.Text = "Giá xăng";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1895, 1010);
+            ClientSize = new Size(1166, 631);
             Controls.Add(label3);
             Controls.Add(FuelPriceBox);
             Controls.Add(pictureBox4);
@@ -223,6 +233,7 @@
             Controls.Add(Title);
             Controls.Add(LoadPanel);
             FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(2, 2, 2, 2);
             MaximizeBox = false;
             Name = "Form1";
             StartPosition = FormStartPosition.CenterScreen;

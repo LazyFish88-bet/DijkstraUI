@@ -61,10 +61,6 @@ namespace Test
             }
         }
 
-        // ==========================================
-        // CÁC CLASS MÔ HÌNH DỮ LIỆU TỪ FILE MỚI
-        // ==========================================
-
         public class MyPriorityQueue
         {
             private class Node

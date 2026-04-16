@@ -39,9 +39,10 @@
             // 
             pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
             pictureBox1.Image = Properties.Resources.z7661702462048_eb19cdbc20e211f9ac355926bf9cab1b;
-            pictureBox1.Location = new Point(0, 3);
+            pictureBox1.Location = new Point(20, 2);
+            pictureBox1.Margin = new Padding(2);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(1397, 867);
+            pictureBox1.Size = new Size(860, 542);
             pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
@@ -49,9 +50,10 @@
             // 
             // progressBar1
             // 
-            progressBar1.Location = new Point(348, 922);
+            progressBar1.Location = new Point(214, 576);
+            progressBar1.Margin = new Padding(2);
             progressBar1.Name = "progressBar1";
-            progressBar1.Size = new Size(645, 46);
+            progressBar1.Size = new Size(397, 29);
             progressBar1.TabIndex = 1;
             progressBar1.Click += progressBar1_Click;
             // 
@@ -62,13 +64,15 @@
             // 
             // BasePage
             // 
-            AutoScaleDimensions = new SizeF(13F, 32F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Info;
             Controls.Add(progressBar1);
             Controls.Add(pictureBox1);
+            Margin = new Padding(2);
             Name = "BasePage";
-            Size = new Size(1400, 1008);
+            Size = new Size(862, 630);
+            Load += BasePage_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
         }
