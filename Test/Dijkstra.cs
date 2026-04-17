@@ -20,6 +20,7 @@ namespace Test
         {
             InitializeComponent();
         }
+        //Selection Sort cho EdgesName
         public static void SelectionSort(string[] arr)
         {
             int n = arr.Length;
@@ -138,6 +139,7 @@ namespace Test
         {
             private List<string> CityList = new List<string>();
             private Dictionary<string, int> CityIndexMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
+            //Insertion Sort cho dictionary
             public void InsertionSortCities()
             {
                 int n = CityList.Count;
